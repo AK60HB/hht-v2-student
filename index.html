@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Portal - Hệ Sinh Thái Hỗ Trợ Học Sinh Toàn Diện</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+    <style>
+        :root { --dream-bg: #f8f9fa; --card-radius: 24px; }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: var(--dream-bg);
+            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-size: 100% 700px; background-repeat: no-repeat;
+            color: #2d3436; overflow-x: hidden; min-height: 100vh;
+        }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: var(--card-radius); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05); }
+        .hidden { display: none !important; }
+        .page-content { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body>
+
+    <nav class="fixed top-0 w-full z-50 px-4 md:px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass px-6 py-4 shadow-sm">
+            <div class="flex items-center gap-3 font-bold text-xl text-[#6c5ce7] cursor-pointer" onclick="window.showPage('home')">
+                <i data-lucide="sparkles"></i> <span>The Portal</span>
+            </div>
+            <div class="hidden md:flex gap-8 font-semibold text-sm text-slate-600">
+                <a href="javascript:void(0)" onclick="window.showPage('home')">Trang chủ</a>
+                <a href="javascript:void(0)" onclick="window.showPage('library')">Tâm lý</a>
+                <a href="javascript:void(0)" onclick="window.showPage('career')">Nghề nghiệp</a>
+                <a href="javascript:void(0)" onclick="window.showPage('ai')">Góc AI</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="window.showPage('admin')" class="text-xs font-bold text-slate-400 hover:text-slate-600">Admin</button>
+                <div class="flex items-center gap-3 glass px-4 py-2 text-sm font-bold">
+                    <span id="user-rank" class="text-indigo-600">Hạt bụi sao</span>
+                    <div id="avatar-icon">🌱</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
+        <div id="page-home" class="page-content">
+            <h1 class="text-5xl font-bold text-white mb-8">Chào cậu, Người du hành!</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-8 cursor-pointer" onclick="window.showPage('library')">
+                    <h3 class="text-2xl font-bold mb-2">Thế giới Tâm lý</h3>
+                    <p>Khám phá bản thân và chữa lành tâm hồn.</p>
+                </div>
+                <div class="glass p-8 cursor-pointer" onclick="window.showPage('career')">
+                    <h3 class="text-2xl font-bold mb-2">Thế giới Nghề nghiệp</h3>
+                    <p>Tìm kiếm định hướng cho tương lai.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-library" class="page-content hidden">
+            <h2 class="text-3xl font-bold text-white mb-6">Thư viện Tâm lý</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass p-6" onclick="window.openStory('failure')">
+                    <h4 class="font-bold text-xl">Điểm số không định nghĩa cậu</h4>
+                    <p class="text-sm">Vượt qua áp lực học tập.</p>
+                </div>
+            </div>
+        </div>
+        
+        </main>
+
+    <script>
+        // Khởi tạo các biến toàn cục
+        window.xp = 0;
+        window.currentRank = "Hạt bụi sao";
+
+        // Hàm chuyển trang chính
+        window.showPage = function(pageId) {
+            console.log("Navigating to:", pageId);
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+            
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Quan trọng: Vẽ lại icons cho nội dung mới
+            if (window.lucide) {
+                setTimeout(() => lucide.createIcons(), 50);
+            }
+        };
+
+        // Hàm mở truyện
+        window.openStory = function(storyKey) {
+            console.log("Opening story:", storyKey);
+            // Thêm logic hiển thị modal truyện của bạn ở đây
+            alert("Đang mở câu chuyện: " + storyKey);
+        };
+
+        // Hàm lật thẻ bài Daily Check-in
+        window.flipDailyCard = function(event) {
+            const card = document.getElementById('daily-card-inner');
+            if (card) {
+                card.classList.toggle('rotate-y-180');
+            }
+        };
+
+        // Khởi tạo khi trang web sẵn sàng
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("The Portal is ready!");
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            // Mặc định hiển thị trang chủ
+            window.showPage('home');
+        });
+    </script>
+</body>
+</html>
